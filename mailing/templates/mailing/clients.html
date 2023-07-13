@@ -1,0 +1,43 @@
+{% extends 'mailing/base.html' %}
+{% block title %}
+    Клиенты
+{% endblock %}
+{% block main %}
+    <div class="row mt-2">
+        <div class="col m-2">
+            <h1>Клиенты</h1>
+            <table class="table table-primary table-striped-columns">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Отчество</th>
+                        <th>email</th>
+                        <th>Удалить</th>
+                        <th>Редактировать</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr>
+                        <td>{{ client.first_name }}</td>
+                        <td>{{ client.last_name }}</td>
+                        <td>{{ client.patronymic }}</td>
+                        <td>{{ client.email }}</td>
+                        <td><a class="btn btn-danger" href="{% url 'mailing:delete_client' client.id %}">Удалить</a></td>
+                        <td><a class="btn btn-primary" href="{% url 'mailing:edit_client' client.id %}">Редактировать</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col m-2">
+            <a class="btn btn-primary" href="{% url 'mailing:add_client' %}">Добавить клиента</a>
+
+        </div>
+    </div>
+
+{% endblock %}

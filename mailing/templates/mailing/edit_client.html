@@ -1,0 +1,20 @@
+{% extends 'mailing/base.html' %}
+{% block title %}
+    Изменить информацию клиента
+{% endblock %}
+{% block main %}
+    <div class="row mt-2">
+        <div class="col m-2">
+            <h1>Изменить информацию клиента</h1>
+            <form method="post" action="{% url 'mailing:edit_client' client.id %}" >
+                {% csrf_token %}
+                <input type="text" class="form-control" placeholder="Имя" value="{{ client.first_name }}" name="first_name"><br>
+                <input type="text" class="form-control" placeholder="Фамилия" value="{{ client.last_name }}" name="last_name"><br>
+                <input type="text" class="form-control" placeholder="Отчество" value="{{ client.patronymic }}" name="patronymic"><br>
+                <input type="email" class="form-control" placeholder="Электронная почта" value="{{ client.email }}" name="email"><br>
+                <input type="submit" class="btn btn-primary" value="Изменить">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

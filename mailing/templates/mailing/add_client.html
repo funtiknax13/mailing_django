@@ -1,0 +1,20 @@
+{% extends 'mailing/base.html' %}
+{% block title %}
+    Добавить клиента
+{% endblock %}
+{% block main %}
+    <div class="row mt-2">
+        <div class="col m-2">
+            <h1>Добавить клиента</h1>
+            <form method="post" action="{% url 'mailing:add_client' %}" >
+                    {% csrf_token %}
+                    <input type="text" class="form-control" placeholder="Имя" name="first_name"><br>
+                    <input type="text" class="form-control" placeholder="Фамилия" name="last_name"><br>
+                    <input type="text" class="form-control" placeholder="Отчество" name="patronymic"><br>
+                    <input type="email" class="form-control" placeholder="Электронная почта" name="email"><br>
+                    <input type="submit" class="btn btn-primary" value="Добавить">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

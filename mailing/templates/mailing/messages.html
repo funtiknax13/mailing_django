@@ -1,0 +1,40 @@
+{% extends 'mailing/base.html' %}
+{% block title %}
+    Сообщения
+{% endblock %}
+{% block main %}
+    <div class="row mt-2">
+        <div class="col m-2">
+            <h1>Письма</h1>
+            <table class="table table-primary table-striped-columns">
+                <thead>
+                    <tr>
+                        <th>Тема письма</th>
+                        <th>Текст</th>
+                        <th>Удалить</th>
+                        <th>Редактировать</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for message in messages %}
+                    <tr>
+                        <td>{{ message.title }}</td>
+                        <td>{{ message.text | linebreaks }}</td>
+                        <td><a class="btn btn-danger" href="{% url 'mailing:delete_message' message.id %}">Удалить</a></td>
+                        <td><a class="btn btn-primary" href="{% url 'mailing:edit_message' message.id %}">Редактировать</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col m-2">
+            <a class="btn btn-primary" href="{% url 'mailing:add_message' %}">Добавить письмо</a>
+
+        </div>
+    </div>
+
+{% endblock %}
