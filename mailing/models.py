@@ -53,7 +53,6 @@ class Mailing(models.Model):
     message = models.ForeignKey(Message, verbose_name='Сообщение', on_delete=models.CASCADE)
 
     def get_status(self):
-
         now = timezone.now()
         if self.start_time < now < self.end_time:
             self.status = "started"

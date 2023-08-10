@@ -17,12 +17,13 @@
                 </thead>
                 <tbody>
 
-                    {% for message in messages %}
+                    {% for object in object_list %}
                     <tr>
-                        <td>{{ message.title }}</td>
-                        <td>{{ message.text | linebreaks }}</td>
-                        <td><a class="btn btn-danger" href="{% url 'mailing:delete_message' message.id %}">Удалить</a></td>
-                        <td><a class="btn btn-primary" href="{% url 'mailing:edit_message' message.id %}">Редактировать</a></td>
+                        <td>{{ object.title }}</td>
+                        <td>{{ object.text | linebreaks | truncatechars:100 }}
+                            <a href="{% url 'mailing:detail_message' object.id %}">Подробнее</a></td>
+                        <td><a class="btn btn-danger" href="{% url 'mailing:delete_message' object.id %}">Удалить</a></td>
+                        <td><a class="btn btn-primary" href="{% url 'mailing:edit_message' object.id %}">Редактировать</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

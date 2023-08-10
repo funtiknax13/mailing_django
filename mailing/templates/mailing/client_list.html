@@ -18,14 +18,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for client in clients %}
+                    {% for object in object_list %}
                     <tr>
-                        <td>{{ client.first_name }}</td>
-                        <td>{{ client.last_name }}</td>
-                        <td>{{ client.patronymic }}</td>
-                        <td>{{ client.email }}</td>
-                        <td><a class="btn btn-danger" href="{% url 'mailing:delete_client' client.id %}">Удалить</a></td>
-                        <td><a class="btn btn-primary" href="{% url 'mailing:edit_client' client.id %}">Редактировать</a></td>
+                        <td>{{ object.first_name }}</td>
+                        <td>{{ object.last_name }}</td>
+                        <td>{{ object.patronymic }}</td>
+                        <td>{{ object.email }}</td>
+                        <td><a class="btn btn-danger" href="{% url 'mailing:delete_client' object.pk %}">Удалить</a></td>
+                        <td><a class="btn btn-primary" href="{% url 'mailing:edit_client' object.pk %}">Редактировать</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

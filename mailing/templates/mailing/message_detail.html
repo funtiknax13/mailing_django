@@ -1,0 +1,21 @@
+{% extends 'mailing/base.html' %}
+{% block title %}
+    Удаление
+{% endblock %}
+{% block main %}
+    <div class="row mt-2 justify-content-center">
+        <div class="col-6">
+            <div class="card text-center bg-info">
+              <div class="card-body">
+                  <h4 class="card-title">{{ object.title }}</h4>
+                  <p class="card-text">{{ object.text | linebreaks }}</p>
+                  <br>
+                  <div class="">
+                      <a class="btn btn-danger" href="{% url 'mailing:delete_message' object.id %}">Удалить</a>
+                      <a class="btn btn-primary" href="{% url 'mailing:edit_message' object.id %}">Редактировать</a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
