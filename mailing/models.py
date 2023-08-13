@@ -47,10 +47,10 @@ class Mailing(models.Model):
 
     start_time = models.DateTimeField(verbose_name='Старт рассылки')
     end_time = models.DateTimeField(verbose_name='Завершение рассылки')
-    time = models.TimeField(verbose_name='Время рассылки')
     periodicity = models.CharField(max_length=5, choices=PERIODICITY_CHOICE, default='day', verbose_name='Периодичность')
     status = models.CharField(max_length=7, choices=STATUS_CHOICE, default='created', verbose_name='Статус')
     message = models.ForeignKey(Message, verbose_name='Сообщение', on_delete=models.CASCADE)
+    clients = models.ManyToManyField(Client, verbose_name='Клиенты')
 
     def get_status(self):
         now = timezone.now()

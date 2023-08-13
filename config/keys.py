@@ -1,0 +1,2 @@
+USERNAME = 'funtiknax13'
+PASSWORD = '1234'

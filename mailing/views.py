@@ -77,13 +77,13 @@ class MailingListView(ListView):
 
 class MailingCreateView(CreateView):
     model = Mailing
-    fields = ('start_time', 'end_time', 'time', 'periodicity', 'message')
+    fields = ('start_time', 'end_time', 'periodicity', 'message')
     success_url = reverse_lazy('mailing:index')
 
 
 class MailingUpdateView(UpdateView):
     model = Mailing
-    fields = ('start_time', 'end_time', 'time', 'periodicity', 'message')
+    fields = ('start_time', 'end_time', 'periodicity', 'message')
     success_url = reverse_lazy('mailing:index')
 
 
