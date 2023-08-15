@@ -32,3 +32,4 @@ class ArticleForm(StyleFormMixin, forms.ModelForm):
         if answer:
             raise forms.ValidationError(f'Использовано запрещенное слово: {answer}')
         return cleaned_data
+
