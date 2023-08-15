@@ -4,25 +4,9 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
+from mailing.forms import MessageForm, ClientForm, MailingForm
 from mailing.models import Client, Message, Mailing, Log
 from mailing.services import send_message_email
-
-
-def test(request):
-    now_time = timezone.now().time().replace(microsecond=0).replace(second=0)
-    clients_email = list(
-        Client.objects.values_list('email', flat=True)
-    )
-
-    print(now_time)
-    mailing_list = Mailing.objects.filter(time=now_time)
-    # for mailing in mailing_list:
-    #     if mailing.get_status() == 'started':
-    #         send_message_email(mailing, clients_email)
-    # mailing_list = Mailing.objects.all()
-    for mailing in mailing_list:
-        print(mailing)
-    return HttpResponse("You're looking at question.")
 
 
 class ClientListView(ListView):
@@ -31,13 +15,13 @@ class ClientListView(ListView):
 
 class ClientCreateView(CreateView):
     model = Client
-    fields = ('first_name', 'last_name', 'patronymic', 'email')
+    form_class = ClientForm
     success_url = reverse_lazy('mailing:clients')
 
 
 class ClientUpdateView(UpdateView):
     model = Client
-    fields = ('first_name', 'last_name', 'patronymic', 'email')
+    fields = ClientForm
     success_url = reverse_lazy('mailing:clients')
 
 
@@ -56,13 +40,13 @@ class MessageDetailView(DetailView):
 
 class MessageCreateView(CreateView):
     model = Message
-    fields = ('title', 'text')
+    form_class = MessageForm
     success_url = reverse_lazy('mailing:messages')
 
 
 class MessageUpdateView(UpdateView):
     model = Message
-    fields = ('title', 'text')
+    form_class = MessageForm
     success_url = reverse_lazy('mailing:messages')
 
 
@@ -77,19 +61,49 @@ class MailingListView(ListView):
 
 class MailingCreateView(CreateView):
     model = Mailing
-    fields = ('start_time', 'end_time', 'periodicity', 'message')
+    form_class = MailingForm
     success_url = reverse_lazy('mailing:index')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mailing = form.save()
+            new_mailing.save()
+
+            if new_mailing.get_status() == 'started':
+                send_message_email(new_mailing)
+
+        return super().form_valid(form)
 
 
 class MailingUpdateView(UpdateView):
     model = Mailing
-    fields = ('start_time', 'end_time', 'periodicity', 'message')
+    form_class = MailingForm
     success_url = reverse_lazy('mailing:index')
 
 
 class MailingDeleteView(DeleteView):
     model = Mailing
     success_url = reverse_lazy('mailing:index')
+
+
+class LogListView(ListView):
+    model = Log
+
+def test(request):
+    now = timezone.now()
+    print(now)
+    mailing = Mailing.objects.all()
+    for m in mailing:
+        m.get_status()
+    mailing_list = Mailing.objects.exclude(status='closed')
+    print(mailing_list)
+    for mailing in mailing_list:
+
+        last_send = mailing.log_set.filter(status='ok').order_by('-last_attempt').first()
+        # send_message_email(mailing)
+        print(mailing.pk, last_send)
+
+    return HttpResponse("Hello test")
 
 
 

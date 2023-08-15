@@ -58,10 +58,11 @@ class Mailing(models.Model):
             self.status = "started"
         elif now > self.end_time:
             self.status = "closed"
+        self.save()
         return self.status
 
     def __str__(self):
-        return f'{self.message}: {self.time} (once a {self.periodicity})'
+        return f'{self.message}: once a {self.periodicity}'
 
     class Meta:
         verbose_name = 'Рассылка'
@@ -70,13 +71,12 @@ class Mailing(models.Model):
 
 class Log(models.Model):
     STATUS_CHOICE = (
-        ("success", "Исполнена"),
+        ("ok", "Исполнена"),
         ("failed", "Провалена"),
     )
     mailing = models.ForeignKey(Mailing, verbose_name='Рассылка', on_delete=models.CASCADE)
     last_attempt = models.DateTimeField(verbose_name='Время последней попытки')
-    status = models.CharField(max_length=7, choices=STATUS_CHOICE, verbose_name='Статус попытки')
-    mail_response = models.CharField(max_length=250, verbose_name='Ответ почтового сервиса')
+    status = models.CharField(max_length=6, choices=STATUS_CHOICE, verbose_name='Статус попытки')
 
     def __str__(self):
         return f'{self.mailing} ({self.last_attempt}) - {self.status}'

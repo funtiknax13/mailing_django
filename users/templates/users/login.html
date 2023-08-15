@@ -1,0 +1,23 @@
+{% extends 'mailing/base.html' %}
+{% load my_tags %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block main %}
+    <div class="row mt-2 justify-content-center">
+        <div class="col-6">
+            <div class="card text-center bg-info">
+              <div class="card-body">
+                <h4 class="card-title">Вход</h4>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" class="btn btn-primary" value="Войти">
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

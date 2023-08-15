@@ -1,0 +1,30 @@
+{% extends 'mailing/base.html' %}
+{% load my_tags %}
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+{% block main %}
+    <h1>{{ object.title }}</h1>
+    <div class="row mt-2 justify-content-center">
+
+        <div class="col-6">
+            <div class="card bg-info">
+            {% if object.image %}
+              <p style="text-align: center;">
+                <img src="{{ object.image|mymedia }}" alt="{{ object.title }}" style="max-height:225px; max-width:100%; width: auto; height: auto;">
+              </p>
+            {% endif %}
+              <div class="card-body">
+                  <h5 class="card-title">{{ object.title }}</h5>
+                  <h6 class="card-title text-body-tertiary">({{ object.slug }})</h6>
+                  <p class="card-text">{{ object.text|linebreaks }}</p>
+                  <p class="text-end text-body-tertiary">Просмотры: {{object.view_count}}</p>
+                  <h6>Дата создания: {{ object.create_date}}</h6>
+
+                <a href="{% url 'blog:blog' %}" class="btn btn-primary">На главную</a>
+              </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

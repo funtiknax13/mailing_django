@@ -15,7 +15,40 @@
         <li class="nav-item">
           <a class="nav-link text-white text-end" href="{% url 'mailing:messages' %}">Письма</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link text-white text-end" href="{% url 'mailing:logs' %}">Логи рассылок</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white text-end" href="{% url 'blog:blog' %}">Блог</a>
+        </li>
       </ul>
     </div>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav2">
+      <ul class="navbar-nav">
+        {% if user.is_authenticated %}
+          <li class="nav-item justify-content-end">
+            <a class="nav-link text-white text-end" href="{% url 'users:profile' %}">Профиль
+            {% if not user.email_is_confirmed %}
+            <span class="badge text-danger">не подтвержден</span>
+            {% endif %}
+            </a>
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger text-end" href="{% url 'users:logout' %}">Выйти</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-white text-end" href="{% url 'users:login' %}">Войти</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white text-end" href="{% url 'users:register' %}">Регистрация</a>
+          </li>
+        {% endif %}
+
+
+      </ul>
+    </div>
+
   </div>
 </nav>

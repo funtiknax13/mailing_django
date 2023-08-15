@@ -11,10 +11,10 @@
                     <tr>
                         <th>Старт рассылки</th>
                         <th>Конец рассылки</th>
-                        <th>Время рассылки</th>
                         <th>Периодичность</th>
                         <th>Статус</th>
                         <th>Сообщение</th>
+                        <th>Клиенты</th>
                         <th>Удалить</th>
                         <th>Редактировать</th>
                     </tr>
@@ -24,10 +24,13 @@
                     <tr>
                         <td>{{ object.start_time }}</td>
                         <td>{{ object.end_time }}</td>
-                        <td>{{ object.time }}</td>
                         <td>{{ object.periodicity }}</td>
                         <td>{{ object.get_status }}</td>
                         <td>{{ object.message }}</td>
+                        <td>{% for client in object.clients.all %}
+                            {{ client }}<br>
+                            {% endfor %}
+                        </td>
                         <td><a class="btn btn-danger" href="{% url 'mailing:delete_mailing' object.pk %}">Удалить</a></td>
                         <td><a class="btn btn-primary" href="{% url 'mailing:edit_mailing' object.pk %}">Редактировать</a></td>
                     </tr>
