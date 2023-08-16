@@ -148,7 +148,6 @@ EMAIL_HOST_USER = 'noreply@oscarbot.ru'
 EMAIL_HOST_PASSWORD = 'AsTSNVv7pun9'
 EMAIL_USE_SSL = True
 
-
 CRONJOBS = [
-    ('*/1 * * * *', 'mailing.services.send_mailing')
+    ('*/10 * * * *', 'mailing.services.send_mailing')
 ]

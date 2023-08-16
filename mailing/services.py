@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.core.mail import send_mail
 from mailing.models import Mailing, Log
@@ -24,23 +26,21 @@ def send_message_email(mailing: object) -> None:
 def send_mailing():
     now = timezone.now()
     mailing_list = Mailing.objects.exclude(status='closed')
-    print('lol')
     for mailing in mailing_list:
-        last_send = mailing.log_set.filter(status='ok').order_by('last_attempt').first()
-        send_message_email(mailing)
-        print(last_send)
+        if mailing.get_status() == 'started':
+            last_send = mailing.log_set.filter(status='ok').order_by('-last_attempt').first()
+            if last_send:
+                if mailing.periodicity == 'day':
+                    send_time = last_send.last_attempt + timedelta(days=1)
+                elif mailing.periodicity == 'week':
+                    send_time = last_send.last_attempt + timedelta(days=7)
+                else:
+                    send_time = last_send.last_attempt + timedelta(days=30)
+                if (send_time - now) < timedelta(minutes=15):
+                    send_message_email(mailing)
+            else:
+                send_message_email(mailing)
 
-# def test():
-#     now_time = timezone.now().time()
-#     clients_email = list(
-#         Client.objects.values_list('email', flat=True)
-#     )
-#
-#     print(now_time)
-#     mailing_list = Mailing.objects.filter(time=now_time)
-#     for mailing in mailing_list:
-#         if mailing.get_status() == 'started':
-#             send_message_email(mailing, clients_email)
 
 
 

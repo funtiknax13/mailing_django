@@ -20,5 +20,5 @@ urlpatterns = [
     path('message<int:pk>/detail', MessageDetailView.as_view(), name="detail_message"),
     path('message<int:pk>/edit', MessageUpdateView.as_view(), name="edit_message"),
     path('logs', LogListView.as_view(), name="logs"),
-    path('test', test, name="test")
+    # path('test', test, name="test")
 ]
