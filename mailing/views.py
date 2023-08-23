@@ -6,9 +6,22 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
+from blog.models import Article
 from mailing.forms import MessageForm, ClientForm, MailingForm
 from mailing.models import Client, Message, Mailing, Log
 from mailing.services import send_message_email
+
+
+def index(request):
+    mailing_count = Mailing.objects.all().count()
+    active_mailing_count = Mailing.objects.filter(status='started').count()
+    client_count = Client.objects.all().count()
+    articles = Article.objects.order_by('?')[:3]
+    context = {'mailing_count': mailing_count,
+               'active_mailing_count': active_mailing_count,
+               'client_count': client_count,
+               'object_list': articles}
+    return render(request, 'mailing/index.html', context)
 
 
 class ClientListView(ListView):
@@ -91,27 +104,7 @@ class MailingDeleteView(DeleteView):
 class LogListView(ListView):
     model = Log
 
-#
-# def test(request):
-#     now = timezone.now()
-#     mailing_list = Mailing.objects.exclude(status='closed')
-#     for mailing in mailing_list:
-#         if mailing.get_status() == 'started':
-#             last_send = mailing.log_set.filter(status='ok').order_by('-last_attempt').first()
-#             if last_send:
-#                 if mailing.periodicity == 'day':
-#                     send_time = last_send.last_attempt + timedelta(days=1)
-#                 elif mailing.periodicity == 'week':
-#                     send_time = last_send.last_attempt + timedelta(days=7)
-#                 else:
-#                     send_time = last_send.last_attempt + timedelta(days=30)
-#                 if (send_time - now) < timedelta(minutes=15):
-#                     send_message_email(mailing)
-#                 else:
-#                     print('NO')
-#             else:
-#                 send_message_email(mailing)
-#     return HttpResponse("Hello test")
+
 
 
 

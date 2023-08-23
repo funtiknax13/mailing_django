@@ -1,0 +1,58 @@
+{% extends 'mailing/base.html' %}
+{% load my_tags %}
+{% block title %}
+    Сервис рассылок
+{% endblock %}
+{% block main %}
+    <h1>Сервис рассылок</h1>
+    <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+              <table class="table table-primary table-striped-columns">
+                <thead>
+                    <tr>
+                        <th>Количество созданных рассылок</th>
+                        <th>Количество активных рассылок</th>
+                        <th>Уникальных клиентов для рассылок</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ mailing_count }}</td>
+                        <td>{{ active_mailing_count }}</td>
+                        <td>{{ client_count }}</td>
+                    </tr>
+                </tbody>
+            </table>
+          {% for object in object_list %}
+            <div class="col">
+              <div class="card shadow-sm bg-info">
+                {% if object.image %}
+                <p style="text-align: center;">
+                    <img class="card-img-top" style="max-height:225px; max-width:100%; width: auto; height: auto;" src="{% mediapath object.image %}" alt="{{ object.title }}">
+                </p>
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ object.title }}</h5>
+                  <h6 class="card-title text-body-tertiary">({{ object.slug }})</h6>
+                  <p class="card-text">{{ object.text | truncatechars:100 | linebreaks }}</p>
+                  <p class="text-end text-body-tertiary">Просмотры: {{object.view_count}}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <a href="{% url 'blog:view_article' object.id %}" class="btn btn-primary">Подробнее</a>
+                      {% if user.is_authenticated %}
+                      <a href="{% url 'blog:update_article' object.id %}" class="btn btn-warning">Редактировать</a>
+                      <a href="{% url 'blog:delete_article' object.id %}" class="btn btn-danger">Удалить</a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+    </div>
+
+
+{% endblock %}

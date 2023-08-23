@@ -6,7 +6,8 @@ from mailing.views import *
 app_name = 'mailing'
 
 urlpatterns = [
-    path('', MailingListView.as_view(), name="index"),
+    path('', index, name="index"),
+    path('mailing', MailingListView.as_view(), name="mailing_list"),
     path('add_mailing', MailingCreateView.as_view(), name='add_mailing'),
     path('mailing<int:pk>/delete', MailingDeleteView.as_view(), name="delete_mailing"),
     path('mailing<int:pk>/edit', MailingUpdateView.as_view(), name="edit_mailing"),
