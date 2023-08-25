@@ -8,4 +8,5 @@ class AuthorRequiredMixin:
         object = super().get_object()
         if not object.author == self.request.user:
             raise Http404
+
         return object

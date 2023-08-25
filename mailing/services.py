@@ -7,13 +7,16 @@ from django.utils import timezone
 
 
 def send_message_email(mailing: object) -> None:
-    send_result = send_mail(mailing.message.title,
-              mailing.message.text,
-              settings.EMAIL_HOST_USER,
-              list(
-                  mailing.clients.values_list('email', flat=True)
-              )
-              )
+    try:
+        send_result = send_mail(mailing.message.title,
+                  mailing.message.text,
+                  settings.EMAIL_HOST_USER,
+                  list(
+                      mailing.clients.values_list('email', flat=True)
+                  )
+                  )
+    except:
+        send_result = False
     now = timezone.now()
     if send_result:
         log_status = 'ok'
@@ -27,7 +30,7 @@ def send_mailing():
     now = timezone.now()
     mailing_list = Mailing.objects.exclude(status='closed')
     for mailing in mailing_list:
-        if mailing.get_status() == 'started':
+        if mailing.get_status() == 'started' and mailing.is_active:
             last_send = mailing.log_set.filter(status='ok').order_by('-last_attempt').first()
             if last_send:
                 if mailing.periodicity == 'day':
@@ -37,6 +40,7 @@ def send_mailing():
                 else:
                     send_time = last_send.last_attempt + timedelta(days=30)
                 if (send_time - now) < timedelta(minutes=15):
+                    print(send_time - now)
                     send_message_email(mailing)
             else:
                 send_message_email(mailing)

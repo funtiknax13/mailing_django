@@ -44,3 +44,9 @@ class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
         fields = ('start_time', 'end_time', 'periodicity', 'message', 'clients')
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        super(MailingForm, self).__init__(*args, **kwargs)
+        self.fields['message'].queryset = Message.objects.filter(creator=self.request.user)
+        self.fields['clients'].queryset = Client.objects.filter(creator=self.request.user)

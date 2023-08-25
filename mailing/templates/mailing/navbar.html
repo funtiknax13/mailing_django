@@ -6,6 +6,7 @@
     </button>
     <div class="collapse navbar-collapse " id="navbarNav">
       <ul class="navbar-nav">
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link text-white text-end" aria-current="page" href="{% url 'mailing:mailing_list' %}">Рассылки</a>
         </li>
@@ -18,9 +19,15 @@
         <li class="nav-item">
           <a class="nav-link text-white text-end" href="{% url 'mailing:logs' %}">Логи рассылок</a>
         </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link text-white text-end" href="{% url 'blog:blog' %}">Блог</a>
         </li>
+        {% if user.is_authenticated and perms.mailing.set_active %}
+        <li class="nav-item">
+          <a class="nav-link text-danger text-end" aria-current="page" href="{% url 'mailing:moderation_mailing_list' %}">Модерация</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav2">

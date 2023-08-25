@@ -20,8 +20,13 @@
                   <p class="card-text">{{ object.text|linebreaks }}</p>
                   <p class="text-end text-body-tertiary">Просмотры: {{object.view_count}}</p>
                   <h6>Дата создания: {{ object.create_date}}</h6>
-
-                <a href="{% url 'blog:blog' %}" class="btn btn-primary">На главную</a>
+                  <div class="btn-group w-100">
+                      <a href="{% url 'blog:blog' %}" class="btn btn-primary">К статьям</a>
+                      {% if user.is_authenticated and perms.blog.change_article%}
+                      <a href="{% url 'blog:update_article' object.id %}" class="btn btn-warning">Редактировать</a>
+                      <a href="{% url 'blog:delete_article' object.id %}" class="btn btn-danger">Удалить</a>
+                      {% endif %}
+                  </div>
               </div>
             </div>
         </div>

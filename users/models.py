@@ -53,3 +53,10 @@ class User(AbstractUser):
     def __str__(self):
         return str(self.email)
 
+    class Meta:
+        permissions = [
+            (
+                'set_active',
+                'Can block user'
+            )
+        ]

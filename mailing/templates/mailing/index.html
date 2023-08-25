@@ -38,9 +38,9 @@
                   <p class="card-text">{{ object.text | truncatechars:100 | linebreaks }}</p>
                   <p class="text-end text-body-tertiary">Просмотры: {{object.view_count}}</p>
                   <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
+                    <div class="btn-group w-100">
                       <a href="{% url 'blog:view_article' object.id %}" class="btn btn-primary">Подробнее</a>
-                      {% if user.is_authenticated %}
+                      {% if user.is_authenticated and perms.blog.change_article%}
                       <a href="{% url 'blog:update_article' object.id %}" class="btn btn-warning">Редактировать</a>
                       <a href="{% url 'blog:delete_article' object.id %}" class="btn btn-danger">Удалить</a>
                       {% endif %}

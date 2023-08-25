@@ -1,0 +1,36 @@
+{% extends 'mailing/base.html' %}
+{% block title %}
+    Рассылки
+{% endblock %}
+{% block main %}
+    <div class="row mt-2">
+        <div class="col m-2">
+            <h1>Модерация</h1>
+            <a href="{% url 'mailing:moderation_mailing_list' %}" class="btn btn-primary">Управление рассылками</a>
+            <a href="#" class="btn btn-info">Управление пользователями</a>
+            <table class="table table-primary table-striped-columns mt-2">
+                <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Блокировка/разблокировка</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for object in object_list %}
+                    <tr>
+                        <td>{{ object.email }}</td>
+                        <td>
+                            {% if object.is_active %}
+                            <a class="btn btn-danger" href="{% url 'mailing:moderation_user_update' object.pk %}">Блокировать</a>
+                            {% else %}
+                            <a class="btn btn-success" href="{% url 'mailing:moderation_user_update' object.pk %}">Разблокировать</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

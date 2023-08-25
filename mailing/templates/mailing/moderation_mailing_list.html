@@ -5,8 +5,10 @@
 {% block main %}
     <div class="row mt-2">
         <div class="col m-2">
-            <h1>Рассылки</h1>
-            <table class="table table-primary table-striped-columns">
+            <h1>Модерация</h1>
+            <a href="#" class="btn btn-info">Управление рассылками</a>
+            <a href="{% url 'mailing:moderation_users' %}" class="btn btn-primary">Управление пользователями</a>
+            <table class="table table-primary table-striped-columns mt-2">
                 <thead>
                     <tr>
                         <th>Старт рассылки</th>
@@ -15,9 +17,7 @@
                         <th>Статус</th>
                         <th>Сообщение</th>
                         <th>Клиенты</th>
-                        <th>Удалить</th>
-                        <th>Редактировать</th>
-                        <th>Ручная отправка</th>
+                        <th>Включить/выключить</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,23 +32,19 @@
                             {{ client }}<br>
                             {% endfor %}
                         </td>
-                        <td><a class="btn btn-danger" href="{% url 'mailing:delete_mailing' object.pk %}">Удалить</a></td>
-                        <td><a class="btn btn-primary" href="{% url 'mailing:edit_mailing' object.pk %}">Редактировать</a></td>
                         <td>
-                        {% if object.get_status == 'started' %}
-                        <a class="btn btn-warning" href="{% url 'mailing:manual_sending' object.pk %}">Отправить</a>
-                        {% endif %}</td>
+                            {% if object.get_status != 'closed' %}
+                            {% if object.is_active %}
+                            <a class="btn btn-danger" href="{% url 'mailing:moderation_mailing_update' object.pk %}">Выключить</a>
+                            {% else %}
+                            <a class="btn btn-success" href="{% url 'mailing:moderation_mailing_update' object.pk %}">Включить</a>
+                            {% endif %}
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <div class="row mt-2">
-        <div class="col m-2">
-            <a class="btn btn-primary" href="{% url 'mailing:add_mailing' %}">Добавить рассылку</a>
-
         </div>
     </div>
 

@@ -2,11 +2,13 @@ from django.db import models
 
 from django.utils import timezone
 
+from users.models import User
 
 NULLABLE = {"null": True, "blank": True}
 
 
 class Client(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создал', **NULLABLE)
     email = models.CharField(max_length=200, verbose_name='E-mail')
     first_name = models.CharField(max_length=100, verbose_name='Имя')
     last_name = models.CharField(max_length=100, verbose_name='Фамилия')
@@ -21,6 +23,7 @@ class Client(models.Model):
 
 
 class Message(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
     title = models.CharField(max_length=250, verbose_name='Тема')
     text = models.TextField(verbose_name='Сообщение')
 
@@ -45,12 +48,14 @@ class Mailing(models.Model):
         ("started", "Запущена"),
     )
 
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создал', **NULLABLE)
     start_time = models.DateTimeField(verbose_name='Старт рассылки')
     end_time = models.DateTimeField(verbose_name='Завершение рассылки')
     periodicity = models.CharField(max_length=5, choices=PERIODICITY_CHOICE, default='day', verbose_name='Периодичность')
     status = models.CharField(max_length=7, choices=STATUS_CHOICE, default='created', verbose_name='Статус')
     message = models.ForeignKey(Message, verbose_name='Сообщение', on_delete=models.CASCADE)
     clients = models.ManyToManyField(Client, verbose_name='Клиенты')
+    is_active = models.BooleanField(default=True, verbose_name='Статус активности')
 
     def get_status(self):
         now = timezone.now()
@@ -67,6 +72,13 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+
+        permissions = [
+            (
+                'set_active',
+                'Can off/on mailing'
+            )
+        ]
 
 
 class Log(models.Model):
